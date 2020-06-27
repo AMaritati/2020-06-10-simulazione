@@ -77,6 +77,7 @@ public class FXMLController {
     	
     	model.creaGrafo(genre);
     	txtResult.setText(String.format("GRAFO CREATO!\n#%d VERTICI\n#%d ARCHI",model.nVertici(),model.nArchi()));
+    	boxAttore.getItems().clear();
     	this.boxAttore.getItems().addAll(model.getActors());
 
     }

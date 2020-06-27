@@ -41,23 +41,17 @@ public class Model {
 
 	}
 	public List<Actor> visitaAmpiezza (Actor source){
-		// BUONA DA UTILIZZARE PER LE NAZIONI VICINE
 		List<Actor> visita = new ArrayList<>();
-		List<Actor> lista = new ArrayList<Actor>();
 		
 		BreadthFirstIterator<Actor, DefaultWeightedEdge> bfv = new BreadthFirstIterator<>(grafo,source);
 		while (bfv.hasNext()) {
 		    visita.add(bfv.next());	
 		}
 		
-		for(Actor a : visita) {
-			if(!a.equals(source)) {
-				lista.add(a);
-			}
-		}
+		visita.remove(source);
 		
-		Collections.sort(lista);
-		return lista;
+		Collections.sort(visita);
+		return visita;
 	}
 	
 	public List<Actor> getActors(){
