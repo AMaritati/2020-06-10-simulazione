@@ -7,6 +7,7 @@ package it.polito.tdp.imdb;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.imdb.model.Actor;
 import it.polito.tdp.imdb.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -35,10 +36,10 @@ public class FXMLController {
     private Button btnSimulazione; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxGenere"
-    private ComboBox<?> boxGenere; // Value injected by FXMLLoader
+    private ComboBox<String> boxGenere; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxAttore"
-    private ComboBox<?> boxAttore; // Value injected by FXMLLoader
+    private ComboBox<Actor> boxAttore; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtGiorni"
     private TextField txtGiorni; // Value injected by FXMLLoader
@@ -48,11 +49,35 @@ public class FXMLController {
 
     @FXML
     void doAttoriSimili(ActionEvent event) {
+    	Actor actor = this.boxAttore.getValue();
+    	
+    	if(actor == null) {
+    		this.txtResult.setText("NON HAI INSERITO ALCUN ATTORE");
+    		return;
+    		
+    	}
+    	
+    	txtResult.setText(String.format("ATTORI SIMILI A %s : \n", actor));
+    	
+    	for(Actor a : model.visitaAmpiezza(actor)) {
+    		txtResult.appendText(a.toString()+"\n");
+    	}
+    	
 
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	String genre = this.boxGenere.getValue();
+    	
+    	if(genre==null) {
+    		this.txtResult.setText("NON HAI INSERITO GENERE");
+    		return;
+    	}
+    	
+    	model.creaGrafo(genre);
+    	txtResult.setText(String.format("GRAFO CREATO!\n#%d VERTICI\n#%d ARCHI",model.nVertici(),model.nArchi()));
+    	this.boxAttore.getItems().addAll(model.getActors());
 
     }
 
@@ -75,5 +100,6 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	this.boxGenere.getItems().addAll(model.loadGenres());
     }
 }
